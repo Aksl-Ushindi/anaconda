@@ -1,0 +1,3365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permissive Bar — Roadmap 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #161618;
+            --accent-gold: #c9a66b;
+            --accent-copper: #b87333;
+            --text-primary: #f5f5f4;
+            --text-secondary: #a1a1a0;
+            --text-muted: #6b6b6a;
+            --border: #2a2a2c;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201, 166, 107, 0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .text-gold { color: var(--accent-gold); }
+        .text-muted { color: var(--text-muted); }
+        .text-secondary { color: var(--text-secondary); }
+        .border-gold { border-color: var(--accent-gold); }
+
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 3rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            z-index: 10;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-copper));
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--accent-gold);
+            transform: scale(1.3);
+        }
+
+        .nav-dot:hover { background: var(--text-secondary); }
+
+        .content-block {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.25rem);
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .paragraph {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight { color: var(--text-primary); font-weight: 400; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .card-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .layout-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .layout-text { order: 1; }
+        .layout-image { order: 2; }
+
+        /* Image Styling */
+        .image-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.8) contrast(1.1);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        
+        .image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(10, 10, 11, 0.8) 100%);
+            pointer-events: none;
+        }
+
+        .aspect-portrait { aspect-ratio: 3/4; }
+        .aspect-landscape { aspect-ratio: 4/3; }
+        .aspect-wide { aspect-ratio: 16/9; }
+        .aspect-square { aspect-ratio: 1/1; }
+
+        .time-block {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .time-column { flex: 1; }
+
+        .time-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--accent-gold);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .time-desc {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .avatar-item {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .avatar-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .avatar-value {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .phase-title {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--accent-copper);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .metrics-row {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .metric {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--accent-gold);
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .timeline-marker {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .timeline-content { flex: 1; }
+
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .horizontal-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 2rem 0;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .gallery-grid .image-container {
+            aspect-ratio: 1/1;
+        }
+
+        @media (max-width: 900px) {
+            .layout-split {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .layout-image { order: -1; }
+            .avatar-grid { grid-template-columns: 1fr; }
+            .time-block { flex-direction: column; gap: 2rem; }
+            .metrics-row { gap: 1.5rem; }
+            .nav-dots { display: none; }
+            .slide-number { display: none; }
+            .gallery-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .fade-in { opacity: 1; transform: none; transition: none; }
+            .image-container img { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    <div class="progress-bar" id="progress"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- SLIDE 1: Cover -->
+    <section class="slide" id="slide-0">
+        <div class="content-block" style="text-align: center;">
+            <div class="fade-in">
+                <p class="text-muted" style="font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 2rem;">PERMISSIVE BAR CONCEPT — SUISSE</p>
+            </div>
+            <h1 class="font-display section-title fade-in stagger-1" style="margin-bottom: 0.5rem;">
+                L'Anaconda club - Malley
+            </h1>
+            <p class="fade-in stagger-2" style="font-size: 1.25rem; color: var(--text-secondary); font-weight: 300; margin-bottom: 3rem;">
+                Roadmap 2026
+            </p>
+            <div class="horizontal-line fade-in stagger-3"></div>
+            <p class="fade-in stagger-4" style="font-size: 0.9rem; color: var(--text-muted); max-width: 500px; margin: 0 auto; line-height: 1.8;">
+                Un lieu nocturne à deux visages, où élégance et liberté se rencontrent dans une atmosphère sophistiquée et maîtrisée.
+            </p>
+        </div>
+        <span class="slide-number">01 / 10</span>
+    </section>
+
+    <!-- SLIDE 2: Vision -->
+    <section class="slide" id="slide-1">
+        <div class="content-block">
+            <div class="layout-split">
+                <div class="layout-text">
+                    <p class="phase-title fade-in">VISION GÉNÉRALE</p>
+                    <h2 class="font-display section-title fade-in stagger-1">Deux visages, un lieu</h2>
+                    
+                    <div class="fade-in stagger-2">
+                        <div style="margin-bottom: 2rem;">
+                            <p class="time-label">Créneau 1 — Lounge Afterwork</p>
+                            <p class="time-desc">
+                                Atmosphère élégante, conversationnelle, maîtrisée. Positionnement social, premium, rassurant. 
+                                C'est la vitrine visible.
+                            </p>
+                        </div>
+                        <div>
+                            <p class="time-label">Créneau 2 — Nuit Festive</p>
+                            <p class="time-desc">
+                                Ambiance plus libre, plus festive. Discrétion et sécurité absolues.
+                                Communication intense sur canaux confidentiels.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-image fade-in stagger-3">
+                    <div class="image-container aspect-portrait">
+                        <!-- Image : Femme élégante de dos, ambiance lounge nocturne -->
+                        <img src="Female_Swingers.jpg" alt="Femme élégante au bar">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">02 / 10</span>
+    </section>
+
+    <!-- SLIDE 3: Avatar -->
+    <section class="slide" id="slide-2">
+        <div class="content-block">
+            <div class="layout-split" style="grid-template-columns: 1fr 1.2fr;">
+                <div class="layout-image fade-in" style="order: -1;">
+                    <div class="image-container aspect-portrait">
+                         <!-- Image : Portrait femme, regard mystérieux, lumière tamisée -->
+                        <img src="7352379d-marcjacobs_headshot_fall2024.jpg" alt="Portrait glamour">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+                <div class="layout-text">
+                    <p class="phase-title fade-in">AVATAR CIBLE</p>
+                    <h2 class="font-display section-title fade-in stagger-1">Celui qui a réussi par lui-même</h2>
+                    <p class="section-subtitle fade-in stagger-2" style="margin-bottom: 2rem;">
+                        Un homme qui estime avoir réussi à force de travail, qui veut vivre des moments 
+                        à la hauteur de ce qu'il pense mériter.
+                    </p>
+                    
+                    <div class="fade-in stagger-3">
+                        <div class="avatar-item" style="border: none; padding-top: 0;">
+                            <p class="avatar-label">Profil</p>
+                            <p class="avatar-value">30–55 ans. Indépendant, patron de PME ou responsable d'équipe.</p>
+                        </div>
+                        <div class="avatar-item">
+                            <p class="avatar-label">Attentes</p>
+                            <p class="avatar-value">Sensible aux codes de réussite. Attiré par le prestige et la discrétion.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">03 / 10</span>
+    </section>
+
+    <!-- SLIDE 4: Structuration -->
+    <section class="slide" id="slide-3">
+        <div class="content-block">
+            <p class="phase-title fade-in">STRUCTURATION OPÉRATIONNELLE</p>
+            <h2 class="font-display section-title fade-in stagger-1">Une expérience maîtrisée</h2>
+            
+            <div class="layout-split" style="margin-top: 2rem;">
+                <div class="layout-text fade-in stagger-2">
+                    <p class="paragraph">
+                        La séparation des créneaux impose une <span class="highlight">cohérence sonore, lumineuse et comportementale</span> distincte. 
+                        L'afterwork devient la vitrine. La nuit festive en est l'extension naturelle.
+                    </p>
+
+                    <div class="card">
+                        <p class="card-title">Standard d'accueil codifié</p>
+                        <p class="card-content">
+                            Posture du staff alignée sur l'ambiance lounge : présence discrète, anticipation des besoins, 
+                            absence de sollicitation agressive. L'expérience fluide devient la norme.
+                        </p>
+                    </div>
+                </div>
+                <div class="layout-image fade-in stagger-3">
+                    <div class="image-container aspect-landscape">
+                        <!-- Image : Intérieur de bar lounge, design intérieur luxe -->
+                        <img src="Capture.PNG" alt="Intérieur lounge">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">04 / 10</span>
+    </section>
+
+    <!-- SLIDE 5: Formation -->
+    <section class="slide" id="slide-4">
+        <div class="content-block">
+            <p class="phase-title fade-in">FORMATION STAFF</p>
+            <h2 class="font-display section-title fade-in stagger-1">Éliminer l'agressivité commerciale</h2>
+            
+            <div class="layout-split" style="margin-top: 2rem;">
+                <div class="layout-image fade-in stagger-2">
+                    <div class="image-container aspect-portrait">
+                        <!-- Image : Service client, élégance, interaction discrète -->
+                        <img src="aerobar.jpg" alt="Service élégant">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+                <div class="layout-text fade-in stagger-3">
+                    <p class="paragraph">
+                        Le personnel représente le premier contact. Sa formation vise un objectif unique : 
+                        <span class="highlight">rendre l'expérience naturelle, jamais improvisée</span>.
+                    </p>
+
+                    <div class="card">
+                        <p class="card-title">Posture et approche</p>
+                        <p class="card-content">
+                            Présentation soignée. Sollicitation indirecte uniquement. 
+                            Le staff lit le client, respecte son tempo. Discrétion absolue.
+                        </p>
+                    </div>
+                    
+                    <p class="paragraph" style="font-style: italic; color: var(--text-muted); font-size: 0.9rem; margin-top: 1.5rem;">
+                        "Le client ne doit jamais se sentir comme un portefeuille ambulant."
+                    </p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">05 / 10</span>
+    </section>
+
+    <!-- SLIDE 6: Ambassadeurs -->
+    <section class="slide" id="slide-5">
+        <div class="content-block">
+            <p class="phase-title fade-in">STRATÉGIE AMBASSADEURS</p>
+            <h2 class="font-display section-title fade-in stagger-1">Un cercle d'influence</h2>
+            
+            <p class="paragraph fade-in stagger-2">
+                Identification progressive d'un noyau de 20 à 40 profils influents localement. 
+                Des habitués réguliers qui deviennent <span class="highlight">prescripteurs naturels</span>. 
+                Un cercle fermé, visible uniquement de l'intérieur.
+            </p>
+
+            <div class="layout-split" style="margin-top: 2rem; align-items: flex-start;">
+                <div class="layout-text fade-in stagger-3">
+                    <div class="metrics-row">
+                        <div class="metric">
+                            <p class="metric-value">20–40</p>
+                            <p class="metric-label">Profils influenceurs</p>
+                        </div>
+                        <div class="metric">
+                            <p class="metric-value">100%</p>
+                            <p class="metric-label">Discrétion assurée</p>
+                        </div>
+                    </div>
+
+                    <p class="paragraph" style="margin-top: 2rem;">
+                        Reconnaissance personnalisée, avantages discrets, invitations ciblées.
+                    </p>
+                </div>
+                <div class="layout-image fade-in stagger-4">
+                    <div class="gallery-grid">
+                        <div class="image-container">
+                            <img src="Untitled design - 2024-11-26T145812.126.jpg" alt="Femme élégante">
+                        </div>
+                        <div class="image-container">
+                            <img src="pexels-cottonbro-3419690.jpg" alt="Femme au cocktail">
+                        </div>
+                        <div class="image-container">
+                            <img src="pexels-cottonbro-5378706.jpg" % alt="Femme tenue de soirée">
+                        </div>
+                        <div class="image-container">
+                            <img src="pexels-pressmaster-3851523.jpg" alt="Regard mystérieux">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">06 / 10</span>
+    </section>
+
+    <!-- SLIDE 7: Programmation -->
+    <section class="slide" id="slide-6">
+        <div class="content-block">
+            <div class="layout-split">
+                <div class="layout-text">
+                    <p class="phase-title fade-in">PROGRAMMATION ÉVÉNEMENTIELLE</p>
+                    <h2 class="font-display section-title fade-in stagger-1">Un calendrier maîtrisé</h2>
+                    
+                    <p class="paragraph fade-in stagger-2">
+                        4 à 5 événements par mois. 2 thématiques fortes. Une alternance rythmée entre 
+                        moments lounge et soirées festives.
+                    </p>
+
+                    <div class="card fade-in stagger-3">
+                        <p class="card-title">Principe directeur</p>
+                        <p class="card-content">
+                            Les thèmes enrichissent l'univers. Une narration claire pour chaque soirée, 
+                            une cohérence visuelle qui renforce l'identité du lieu.
+                        </p>
+                    </div>
+
+                    <div class="metrics-row fade-in stagger-4">
+                        <div class="metric">
+                            <p class="metric-value">4–5</p>
+                            <p class="metric-label">Événements/mois</p>
+                        </div>
+                        <div class="metric">
+                            <p class="metric-value">2</p>
+                            <p class="metric-label">Thématiques</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-image fade-in stagger-2">
+                    <div class="image-container aspect-portrait">
+                        <!-- Image : Ambiance soirée festive, femmes, lumières -->
+                        <img src="qejbclsn.jpg" alt="Ambiance festive">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">07 / 10</span>
+    </section>
+
+    <!-- SLIDE 8: Communication -->
+    <section class="slide" id="slide-7">
+        <div class="content-block">
+            <p class="phase-title fade-in">COMMUNICATION</p>
+            <h2 class="font-display section-title fade-in stagger-1">Deux canaux, deux intensités</h2>
+            
+            <div class="layout-split" style="margin-top: 2rem;">
+                <div class="layout-image fade-in stagger-2">
+                    <div class="image-container aspect-landscape">
+                        <!-- Image : Visuel réseau social, esthétique "old money" -->
+                        <img src="60618ebb053d7999acdbb8ac4bd06509.jpeg" alt="Esthétique digitale">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+                <div class="layout-text fade-in stagger-3">
+                    <div style="margin-bottom: 2rem;">
+                        <p class="time-label">Réseaux officiels</p>
+                        <p class="time-desc">
+                            Mise en avant du créneau lounge. Esthétique old money : silhouettes, ambiance, matières. 
+                            Ton confidentiel.
+                        </p>
+                    </div>
+                    <div>
+                        <p class="time-label">Canaux privés</p>
+                        <p class="time-desc">
+                            Segmentation claire selon le niveau d'engagement. Invitations ciblées. 
+                            Communication directe via Telegram.
+                        </p>
+                    </div>
+                    
+                    <p class="paragraph" style="margin-top: 2rem; font-size: 0.9rem;">
+                        La communication publique suggère, n'explicite pas. L'initié sait. Le curieux devine.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">08 / 10</span>
+    </section>
+
+    <!-- SLIDE 9: Sécurité -->
+    <section class="slide" id="slide-8">
+        <div class="content-block">
+            <p class="phase-title fade-in">SÉCURITÉ & CONFIDENTIALITÉ</p>
+            <h2 class="font-display section-title fade-in stagger-1">Pilier central</h2>
+            
+            <div class="layout-split" style="margin-top: 2rem;">
+                <div class="layout-text fade-in stagger-2">
+                    <p class="paragraph">
+                        Le lieu doit être perçu comme <span class="highlight">sûr, pas permissif au sens chaotique</span>. 
+                        Protection absolue : confidentialité totale, gestion stricte des accès.
+                    </p>
+
+                    <div class="card">
+                        <p class="card-title">Protocoles</p>
+                        <p class="card-content">
+                            Environnement contrôlé. Protection des données. 
+                            Sélection qualitative et réactive. Chaque client sait qu'il est protégé.
+                        </p>
+                    </div>
+                </div>
+                <div class="layout-image fade-in stagger-3">
+                    <div class="image-container aspect-portrait">
+                        <!-- Image : Entrée discrète, hall sombre -->
+                        <img src="elvb.jpg" alt="Entrée discrète">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">09 / 10</span>
+    </section>
+
+    <!-- SLIDE 10: Objectifs -->
+    <section class="slide" id="slide-9">
+        <div class="content-block">
+            <div class="layout-split">
+                <div class="layout-text">
+                    <p class="phase-title fade-in">OBJECTIFS 6–12 MOIS</p>
+                    <h2 class="font-display section-title fade-in stagger-1">Construire la réputation</h2>
+                    
+                    <div class="fade-in stagger-2">
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <p class="timeline-title">Stabiliser le créneau afterwork</p>
+                                <p class="timeline-desc">Positionnement premium établi.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <p class="timeline-title">Créer une base d'habitués</p>
+                                <p class="timeline-desc">Clientèle fidèle et régulière.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <p class="timeline-title">Installer une réputation maîtrisée</p>
+                                <p class="timeline-desc">Image locale contrôlée.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <p class="timeline-title">Structurer des événements signature</p>
+                                <p class="timeline-desc">Soirées thématiques reconnues.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-image fade-in stagger-3">
+                    <div class="image-container aspect-portrait">
+                        <!-- Image : Célébration, champagne, succès -->
+                        <img src="gadgfak.jpg" alt="Succès et célébration">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">10 / 10</span>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation dots
+            const slides = document.querySelectorAll('.slide');
+            const navDotsContainer = document.getElementById('navDots');
+            
+            slides.forEach(function(slide, index) {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                dot.setAttribute('data-index', index);
+                dot.setAttribute('aria-label', 'Aller à la section ' + (index + 1));
+                dot.setAttribute('role', 'button');
+                dot.setAttribute('tabindex', '0');
+                navDotsContainer.appendChild(dot);
+            });
+
+            const navDots = document.querySelectorAll('.nav-dot');
+
+            // Progress bar and active dot update
+            function updateProgress() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = Math.min((scrollTop / docHeight) * 100, 100);
+                document.getElementById('progress').style.width = progress + '%';
+
+                slides.forEach(function(slide, index) {
+                    const rect = slide.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                        navDots.forEach(function(d) { d.classList.remove('active'); });
+                        if (navDots[index]) {
+                            navDots[index].classList.add('active');
+                        }
+                    }
+                });
+            }
+
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(function(el) {
+                observer.observe(el);
+            });
+
+            // Click handlers for nav dots
+            navDots.forEach(function(dot) {
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    slides[index].scrollIntoView({ behavior: 'smooth' });
+                });
+                dot.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        slides[index].scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Scroll listener with throttle
+            let ticking = false;
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        updateProgress();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Initial call
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permissive Bar — Parcours Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #161618;
+            --accent-gold: #c9a66b;
+            --accent-copper: #b87333;
+            --accent-emerald: #4a9c7d;
+            --accent-rose: #a67c7c;
+            --text-primary: #f5f5f4;
+            --text-secondary: #a1a1a0;
+            --text-muted: #6b6b6a;
+            --border: #2a2a2c;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201, 166, 107, 0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .text-gold { color: var(--accent-gold); }
+        .text-muted { color: var(--text-muted); }
+        .text-secondary { color: var(--text-secondary); }
+        .border-gold { border-color: var(--accent-gold); }
+
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 3rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            z-index: 10;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-copper));
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--accent-gold);
+            transform: scale(1.3);
+        }
+
+        .nav-dot:hover { background: var(--text-secondary); }
+
+        .content-block {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .phase-title {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--accent-copper);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* BLUEPRINT STYLES */
+        .blueprint-container {
+            position: relative;
+            width: 100%;
+            padding: 2rem 0;
+        }
+
+        .blueprint-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        /* Prescription Sources */
+        .prescription-zone {
+            display: flex;
+            justify-content: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .prescription-card {
+            background: linear-gradient(135deg, rgba(74, 156, 125, 0.1) 0%, rgba(74, 156, 125, 0.02) 100%);
+            border: 1px solid rgba(74, 156, 125, 0.3);
+            padding: 1.25rem 1.5rem;
+            min-width: 180px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .prescription-card:hover {
+            border-color: rgba(74, 156, 125, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .prescription-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -1.5rem;
+            width: 1.5rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-emerald), transparent);
+        }
+
+        .prescription-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--accent-emerald);
+        }
+
+        .prescription-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--accent-emerald);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .prescription-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .prescription-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+
+        /* Central Entry Point */
+        .entry-point {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .entry-node {
+            background: linear-gradient(135deg, rgba(201, 166, 107, 0.15) 0%, rgba(201, 166, 107, 0.05) 100%);
+            border: 2px solid var(--accent-gold);
+            padding: 1.5rem 2.5rem;
+            position: relative;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .entry-node:hover {
+            box-shadow: 0 0 30px rgba(201, 166, 107, 0.15);
+        }
+
+        .entry-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .entry-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Arrows */
+        .arrow-down {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0;
+        }
+
+        .arrow-down svg {
+            color: var(--accent-gold);
+            opacity: 0.6;
+            animation: pulse-down 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-down {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(4px); opacity: 1; }
+        }
+
+        /* Journey Steps */
+        .journey-step {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.25rem 0;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .journey-step.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .journey-step::before {
+            content: '';
+            position: absolute;
+            left: 60px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, var(--border), transparent);
+        }
+
+        .journey-step:last-child::before {
+            display: none;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .step-number.discovery {
+            background: linear-gradient(135deg, rgba(74, 156, 125, 0.2) 0%, rgba(74, 156, 125, 0.05) 100%);
+            border: 1px solid rgba(74, 156, 125, 0.4);
+            color: var(--accent-emerald);
+        }
+
+        .step-number.entry {
+            background: linear-gradient(135deg, rgba(201, 166, 107, 0.2) 0%, rgba(201, 166, 107, 0.05) 100%);
+            border: 1px solid rgba(201, 166, 107, 0.4);
+            color: var(--accent-gold);
+        }
+
+        .step-number.experience {
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.2) 0%, rgba(184, 115, 51, 0.05) 100%);
+            border: 1px solid rgba(184, 115, 51, 0.4);
+            color: var(--accent-copper);
+        }
+
+        .step-number.loyalty {
+            background: linear-gradient(135deg, rgba(166, 124, 124, 0.2) 0%, rgba(166, 124, 124, 0.05) 100%);
+            border: 1px solid rgba(166, 124, 124, 0.4);
+            color: var(--accent-rose);
+        }
+
+        .step-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .step-phase {
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .step-phase.discovery { color: var(--accent-emerald); }
+        .step-phase.entry { color: var(--accent-gold); }
+        .step-phase.experience { color: var(--accent-copper); }
+        .step-phase.loyalty { color: var(--accent-rose); }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .step-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .step-tag {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* Communication Channel */
+        .comm-channel {
+            position: absolute;
+            right: -180px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comm-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .comm-line {
+            width: 1px;
+            height: 30px;
+            background: var(--border);
+        }
+
+        /* Lateral Communication Panel */
+        .comm-panel {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            border-left: 1px solid var(--border);
+            background: linear-gradient(90deg, transparent, rgba(10, 10, 11, 0.9));
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .comm-section {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comm-section:last-child {
+            border-bottom: none;
+        }
+
+        .comm-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .comm-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        .comm-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+        }
+
+        .comm-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Two Column Layout for Blueprint */
+        .blueprint-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .blueprint-main {
+            position: relative;
+        }
+
+        .blueprint-sidebar {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        /* Connector Lines SVG */
+        .connector-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .connector-path {
+            fill: none;
+            stroke: var(--accent-gold);
+            stroke-width: 1;
+            stroke-dasharray: 4 4;
+            opacity: 0.3;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(201, 166, 107, 0.08) 0%, transparent 100%);
+            border-left: 2px solid var(--accent-gold);
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .highlight-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Metric inline */
+        .metric-inline {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .metric-value-small {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: var(--accent-gold);
+        }
+
+        .metric-label-small {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+
+        /* Prescription Flow */
+        .prescription-flow {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+            color: var(--accent-emerald);
+            opacity: 0.5;
+        }
+
+        /* Horizontal Journey */
+        .journey-horizontal {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            overflow-x: auto;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .journey-stage {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .stage-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stage-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stage-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .stage-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .stage-item {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding-left: 1rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .stage-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5em;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .stage-connector {
+            position: absolute;
+            top: 18px;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stage-connector svg {
+            color: var(--accent-gold);
+            opacity: 0.4;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .blueprint-layout {
+                grid-template-columns: 1fr;
+            }
+            .blueprint-sidebar {
+                position: relative;
+                top: 0;
+                margin-top: 2rem;
+            }
+            .prescription-zone {
+                flex-wrap: wrap;
+            }
+            .prescription-card::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 1.5rem; }
+            .prescription-flow { flex-direction: column; }
+            .journey-horizontal { flex-direction: column; }
+            .stage-connector { display: none; }
+            .nav-dots { display: none; }
+            .slide-number { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .fade-in { opacity: 1; transform: none; transition: none; }
+            .journey-step { opacity: 1; transform: none; transition: none; }
+            .arrow-down svg { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    <div class="progress-bar" id="progress"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- SLIDE 1: Cover -->
+    <section class="slide" id="slide-0">
+        <div class="content-block" style="text-align: center;">
+            <div class="fade-in">
+                <p class="text-muted" style="font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 2rem;">BLUEPRINT CLIENT — PERMISSIVE BAR</p>
+            </div>
+            <h1 class="font-display section-title fade-in stagger-1" style="font-size: clamp(2.5rem, 7vw, 4.5rem); margin-bottom: 0.5rem;">
+                Parcours Client
+            </h1>
+            <p class="fade-in stagger-2" style="font-size: 1.25rem; color: var(--text-secondary); font-weight: 300; margin-bottom: 3rem;">
+                De la prescription a la fidelisation
+            </p>
+            <div class="fade-in stagger-3" style="width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); margin: 0 auto 2rem;"></div>
+            <p class="fade-in stagger-4" style="font-size: 0.9rem; color: var(--text-muted); max-width: 500px; margin: 0 auto; line-height: 1.8;">
+                Un schema detaille du parcours client integrant les sources de prescription, l'experience sur site et les canaux de communication.
+            </p>
+        </div>
+        <span class="slide-number">01 / 04</span>
+    </section>
+
+    <!-- SLIDE 2: Prescription Sources -->
+    <section class="slide" id="slide-1">
+        <div class="content-block">
+            <p class="phase-title fade-in">PHASE 1 — PRESCRIPTION</p>
+            <h2 class="font-display section-title fade-in stagger-1">Sources d'entree</h2>
+            <p class="fade-in stagger-2" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2.5rem; max-width: 700px; line-height: 1.7;">
+                Le client decouvre le Permissive Bar via plusieurs canaux de prescription. Chaque source cree une porte d'entree distincte mais converge vers le meme point.
+            </p>
+
+            <div class="blueprint-layout fade-in stagger-3">
+                <div class="blueprint-main">
+                    <!-- Prescription Sources Flow -->
+                    <div class="prescription-zone" id="prescriptionZone">
+                        <!-- Source 1: Rencontrer une ambassadrice -->
+                        <div class="prescription-card" data-source="ambassadrice">
+                            <svg class="prescription-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            <p class="prescription-label">Source 1</p>
+                            <p class="prescription-title">Ambassadrice</p>
+                            <p class="prescription-desc">Rencontre au casino. Melanie cree le lien, transmet le concept.</p>
+                        </div>
+
+                        <!-- Source 2: Bouche a oreille -->
+                        <div class="prescription-card" data-source="bao">
+                            <svg class="prescription-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <p class="prescription-label">Source 2</p>
+                            <p class="prescription-title">Bouche a oreille</p>
+                            <p class="prescription-desc">Collegues, connaissances. Retour d'experience positif.</p>
+                        </div>
+
+                        <!-- Source 3: Reseau prive -->
+                        <div class="prescription-card" data-source="reseau">
+                            <svg class="prescription-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <path d="M3 9h18"/>
+                                <path d="M9 21V9"/>
+                            </svg>
+                            <p class="prescription-label">Source 3</p>
+                            <p class="prescription-title">Cercle prive</p>
+                            <p class="prescription-desc">Invitation via Telegram. Communication confidentielle.</p>
+                        </div>
+                    </div>
+
+                    <!-- Central Entry Point -->
+                    <div class="entry-point">
+                        <div class="entry-node">
+                            <p class="entry-label">Point de convergence</p>
+                            <p class="entry-title">Premier contact</p>
+                            <p class="entry-subtitle">WhatsApp — Adresse & Instructions</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down -->
+                    <div class="arrow-down">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 5v14M19 12l-7 7-7-7"/>
+                        </svg>
+                    </div>
+
+                    <!-- Key Insight -->
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <p class="highlight-text">
+                            <strong style="color: var(--text-primary);">Communication initiale:</strong> 
+                            Melanie envoie une photo en lingerie + l'adresse du lieu. Le ton est pose: "J'aimerais bien te revoir." 
+                            Aucune pression, seulement une invitation.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sidebar: Communication Channels -->
+                <div class="blueprint-sidebar">
+                    <div class="comm-section">
+                        <p class="comm-label">Canaux actifs</p>
+                        <div class="comm-item">
+                            <svg class="comm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                            </svg>
+                            <span class="comm-text">WhatsApp</span>
+                        </div>
+                        <div class="comm-item">
+                            <svg class="comm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                            </svg>
+                            <span class="comm-text">Telegram</span>
+                        </div>
+                        <div class="comm-item">
+                            <svg class="comm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                            </svg>
+                            <span class="comm-text">Indication verbale</span>
+                        </div>
+                    </div>
+
+                    <div class="comm-section">
+                        <p class="comm-label">Ton de communication</p>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+                            Suggestif, jamais explicite. L'initie sait. Le curieux devine. La discretion est centrale.
+                        </p>
+                    </div>
+
+                    <div class="comm-section">
+                        <p class="comm-label">Message cible</p>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; font-style: italic;">
+                            "C'est un bar ou tout est permis."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">02 / 04</span>
+    </section>
+
+    <!-- SLIDE 3: Full Journey Blueprint -->
+    <section class="slide" id="slide-2">
+        <div class="content-block">
+            <p class="phase-title fade-in">PHASE 2 — PARCOURS COMPLET</p>
+            <h2 class="font-display section-title fade-in stagger-1">Du seuil a la fidelite</h2>
+            <p class="fade-in stagger-2" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2rem; max-width: 700px; line-height: 1.7;">
+                Chaque etape est concue pour renforcer le sentiment d'exclusivite et de maitrise. Le client ne se sent jamais comme un "portefeuille ambulant".
+            </p>
+
+            <div class="fade-in stagger-3">
+                <!-- Horizontal Journey Stages -->
+                <div class="journey-horizontal" id="journeyHorizontal">
+                    
+                    <!-- Stage 1: Entree -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <div class="stage-number discovery">1</div>
+                            <p class="stage-title" style="color: var(--accent-emerald);">Entree</p>
+                        </div>
+                        <div class="stage-items">
+                            <div class="stage-item">Entree discrete, pas d'enseigne</div>
+                            <div class="stage-item">Porte sobre avec sonnette</div>
+                            <div class="stage-item">Accueil par homme en costume</div>
+                            <div class="stage-item">Fille souriante pour la veste</div>
+                            <div class="stage-item">Escorte vers le bar</div>
+                        </div>
+                        <div class="stage-connector">
+                            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M0 12h36M28 4l8 8-8 8"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Stage 2: Installation -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <div class="stage-number entry">2</div>
+                            <p class="stage-title" style="color: var(--accent-gold);">Installation</p>
+                        </div>
+                        <div class="stage-items">
+                            <div class="stage-item">Musique basse, chaleureuse</div>
+                            <div class="stage-item">Serveur professionnel</div>
+                            <div class="stage-item">Ambiance calme, on peut parler</div>
+                            <div class="stage-item">Filles presentes, pas sollicitantes</div>
+                            <div class="stage-item">Proposition d'accompagnement</div>
+                        </div>
+                        <div class="stage-connector">
+                            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M0 12h36M28 4l8 8-8 8"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Stage 3: Experience -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <div class="stage-number experience">3</div>
+                            <p class="stage-title" style="color: var(--accent-copper);">Experience</p>
+                        </div>
+                        <div class="stage-items">
+                            <div class="stage-item">Rencontre avec la fille</div>
+                            <div class="stage-item">Conversation fluide, tactile</div>
+                            <div class="stage-item">"Ici tout est permis"</div>
+                            <div class="stage-item">Montee en douceur</div>
+                            <div class="stage-item">Chambre privee</div>
+                        </div>
+                        <div class="stage-connector">
+                            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M0 12h36M28 4l8 8-8 8"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Stage 4: Sortie -->
+                    <div class="journey-stage">
+                        <div class="stage-header">
+                            <div class="stage-number loyalty">4</div>
+                            <p class="stage-title" style="color: var(--accent-rose);">Fidelisation</p>
+                        </div>
+                        <div class="stage-items">
+                            <div class="stage-item">Salut VIP a la sortie</div>
+                            <div class="stage-item">Demande de satisfaction</div>
+                            <div class="stage-item">Livre d'or / Google</div>
+                            <div class="stage-item">Invitation cercle prive</div>
+                            <div class="stage-item">Coordonnees Telegram</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Metrics Row -->
+            <div class="fade-in stagger-4" style="display: flex; gap: 3rem; margin-top: 2.5rem; flex-wrap: wrap; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <div>
+                    <p class="time-label">Principe directeur</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; max-width: 400px;">
+                        Aucune pression. Le client choisi son rythme. Le staff lit et anticipe sans pousser.
+                    </p>
+                </div>
+                <div>
+                    <p class="time-label">Resultat cible</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; max-width: 400px;">
+                        Le client se sent VIP, pas client. Il revient et recommande naturellement.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">03 / 04</span>
+    </section>
+
+    <!-- SLIDE 4: Retention & Loop -->
+    <section class="slide" id="slide-3">
+        <div class="content-block">
+            <p class="phase-title fade-in">PHASE 3 — BOUCLE DE FIDELISATION</p>
+            <h2 class="font-display section-title fade-in stagger-1">Le client devient prescripteur</h2>
+            <p class="fade-in stagger-2" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2.5rem; max-width: 700px; line-height: 1.7;">
+                Apres une premiere experience positive, le client revient avec ses collegues. Il devient lui-meme une source de prescription, fermant la boucle.
+            </p>
+
+            <div class="fade-in stagger-3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <!-- Retention Mechanisms -->
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.75rem;">
+                    <p class="time-label" style="margin-bottom: 1rem;">Mecanismes de retention</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 6px; height: 6px; background: var(--accent-gold); border-radius: 50%; margin-top: 0.5rem; flex-shrink: 0;"></div>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Reconnaissance du staff</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Le barman se souvient. Verres offerts. Statut VIP implicite.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 6px; height: 6px; background: var(--accent-gold); border-radius: 50%; margin-top: 0.5rem; flex-shrink: 0;"></div>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Avantages cumules</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Offrir des verres aux filles. Acces fumoir prive. Evenements exclusifs.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 6px; height: 6px; background: var(--accent-gold); border-radius: 50%; margin-top: 0.5rem; flex-shrink: 0;"></div>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Communication suivie</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Telegram pour les evenements. Invitations ciblees. Discretion totale.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Loop -->
+                <div style="background: linear-gradient(135deg, rgba(166, 124, 124, 0.08) 0%, transparent 100%); border: 1px solid rgba(166, 124, 124, 0.3); padding: 1.75rem;">
+                    <p class="time-label" style="color: var(--accent-rose); margin-bottom: 1rem;">La boucle</p>
+                    
+                    <div style="position: relative; padding: 1rem 0;">
+                        <!-- Loop Visualization -->
+                        <svg width="100%" height="140" viewBox="0 0 300 140" fill="none" style="display: block;">
+                            <!-- Loop Path -->
+                            <path d="M30 70 Q30 30 100 30 L200 30 Q270 30 270 70 Q270 110 200 110 L100 110 Q30 110 30 70" 
+                                  stroke="rgba(166, 124, 124, 0.4)" stroke-width="1" fill="none" stroke-dasharray="4 4"/>
+                            
+                            <!-- Arrow -->
+                            <polygon points="95,30 105,35 105,25" fill="var(--accent-rose)"/>
+                            
+                            <!-- Nodes -->
+                            <circle cx="30" cy="70" r="8" fill="var(--bg-card)" stroke="var(--accent-rose)" stroke-width="1.5"/>
+                            <circle cx="150" cy="30" r="8" fill="var(--bg-card)" stroke="var(--accent-rose)" stroke-width="1.5"/>
+                            <circle cx="270" cy="70" r="8" fill="var(--bg-card)" stroke="var(--accent-rose)" stroke-width="1.5"/>
+                            <circle cx="150" cy="110" r="8" fill="var(--bg-card)" stroke="var(--accent-rose)" stroke-width="1.5"/>
+                            
+                            <!-- Labels -->
+                            <text x="30" y="95" text-anchor="middle" fill="var(--text-secondary)" font-size="9">Client</text>
+                            <text x="150" y="18" text-anchor="middle" fill="var(--text-secondary)" font-size="9">Experience</text>
+                            <text x="270" y="95" text-anchor="middle" fill="var(--text-secondary)" font-size="9">Fidelite</text>
+                            <text x="150" y="130" text-anchor="middle" fill="var(--text-secondary)" font-size="9">Prescription</text>
+                        </svg>
+                    </div>
+                    
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        Le client satisfait devient prescripteur naturel. Il recommande le lieu a ses collegues, recreant le cycle d'acquisition.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Final Quote -->
+            <div class="highlight-box fade-in stagger-4" style="margin-top: 2rem;">
+                <p class="highlight-text" style="font-size: 0.95rem;">
+                    <strong style="color: var(--text-primary);">Temoignage client (retour collegues):</strong><br>
+                    "C'est vrai qu'il nous faut un coin discret... On entre. Meme accueil. Meme classe. L'ambiance monte doucement. Pas vulgaire. Pas pressee. Je vois mes collegues comprendre, ces porcs."
+                </p>
+            </div>
+        </div>
+        <span class="slide-number">04 / 04</span>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation dots
+            const slides = document.querySelectorAll('.slide');
+            const navDotsContainer = document.getElementById('navDots');
+            
+            slides.forEach(function(slide, index) {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                dot.setAttribute('data-index', index);
+                dot.setAttribute('aria-label', 'Aller a la section ' + (index + 1));
+                dot.setAttribute('role', 'button');
+                dot.setAttribute('tabindex', '0');
+                navDotsContainer.appendChild(dot);
+            });
+
+            const navDots = document.querySelectorAll('.nav-dot');
+
+            // Progress bar and active dot update
+            function updateProgress() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = Math.min((scrollTop / docHeight) * 100, 100);
+                document.getElementById('progress').style.width = progress + '%';
+
+                slides.forEach(function(slide, index) {
+                    const rect = slide.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                        navDots.forEach(function(d) { d.classList.remove('active'); });
+                        if (navDots[index]) {
+                            navDots[index].classList.add('active');
+                        }
+                    }
+                });
+            }
+
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(function(el) {
+                observer.observe(el);
+            });
+
+            // Journey steps animation
+            const journeySteps = document.querySelectorAll('.journey-step');
+            const stepObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry, index) {
+                    if (entry.isIntersecting) {
+                        setTimeout(function() {
+                            entry.target.classList.add('visible');
+                        }, index * 100);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            journeySteps.forEach(function(step) {
+                stepObserver.observe(step);
+            });
+
+            // Prescription cards hover effect
+            const prescriptionCards = document.querySelectorAll('.prescription-card');
+            prescriptionCards.forEach(function(card) {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Click handlers for nav dots
+            navDots.forEach(function(dot) {
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    slides[index].scrollIntoView({ behavior: 'smooth' });
+                });
+                dot.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        slides[index].scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Scroll listener with throttle
+            let ticking = false;
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        updateProgress();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Initial call
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permissive Bar — Roadmap & Strategie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #161618;
+            --accent-gold: #c9a66b;
+            --accent-copper: #b87333;
+            --accent-emerald: #4a9c7d;
+            --accent-rose: #a67c7c;
+            --accent-violet: #7c6a9c;
+            --accent-amber: #c9a06b;
+            --text-primary: #f5f5f4;
+            --text-secondary: #a1a1a0;
+            --text-muted: #6b6b6a;
+            --border: #2a2a2c;
+            --danger: #9c4a4a;
+            --success: #4a9c6a;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201, 166, 107, 0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .text-gold { color: var(--accent-gold); }
+        .text-muted { color: var(--text-muted); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-danger { color: var(--danger); }
+        .text-success { color: var(--success); }
+
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 3rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            z-index: 10;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-copper));
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--accent-gold);
+            transform: scale(1.3);
+        }
+
+        .nav-dot:hover { background: var(--text-secondary); }
+
+        .content-block {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .phase-title {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--accent-copper);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .paragraph {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight { color: var(--text-primary); font-weight: 400; }
+
+        /* Name Evaluation Styles */
+        .name-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .name-card.current {
+            border-left: 3px solid var(--danger);
+        }
+
+        .name-card.proposal {
+            border-left: 3px solid var(--success);
+        }
+
+        .name-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .name-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .name-label.current {
+            background: rgba(156, 74, 74, 0.2);
+            color: var(--danger);
+        }
+
+        .name-label.proposal {
+            background: rgba(74, 156, 106, 0.2);
+            color: var(--success);
+        }
+
+        .name-label.owner {
+            background: rgba(201, 166, 107, 0.2);
+            color: var(--accent-gold);
+        }
+
+        .name-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .name-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .name-point {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .point-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .point-icon.negative { color: var(--danger); }
+        .point-icon.positive { color: var(--success); }
+
+        .point-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .point-text strong {
+            color: var(--text-primary);
+        }
+
+        /* Scoring */
+        .score-bar {
+            height: 4px;
+            background: var(--border);
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            transition: width 1s ease;
+        }
+
+        .score-fill.low { background: linear-gradient(90deg, var(--danger), rgba(156, 74, 74, 0.5)); }
+        .score-fill.high { background: linear-gradient(90deg, var(--success), rgba(74, 156, 106, 0.5)); }
+        .score-fill.gold { background: linear-gradient(90deg, var(--accent-gold), rgba(201, 166, 107, 0.5)); }
+
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Roadmap Styles */
+        .roadmap-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .roadmap-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, var(--accent-gold), var(--accent-copper), var(--border));
+        }
+
+        .roadmap-item {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .roadmap-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .roadmap-content {
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .roadmap-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .roadmap-content.left {
+            text-align: right;
+        }
+
+        .roadmap-content.right {
+            text-align: left;
+        }
+
+        .roadmap-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .node-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--accent-gold);
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-item:hover .node-circle {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .node-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .roadmap-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .roadmap-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .roadmap-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .roadmap-tags.left {
+            justify-content: flex-end;
+        }
+
+        .roadmap-tag {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        /* Revenue Streams */
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .revenue-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .revenue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-copper));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .revenue-card:hover::before {
+            opacity: 1;
+        }
+
+        .revenue-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .revenue-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .revenue-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .revenue-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Concept Cards */
+        .concept-card {
+            background: linear-gradient(135deg, rgba(124, 106, 156, 0.1) 0%, rgba(124, 106, 156, 0.02) 100%);
+            border: 1px solid rgba(124, 106, 156, 0.3);
+            padding: 1.75rem;
+            margin-top: 1rem;
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .concept-badge {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+            background: rgba(124, 106, 156, 0.2);
+            color: var(--accent-violet);
+        }
+
+        .concept-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .concept-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .concept-rules {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .concept-rule {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .rule-marker {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-violet);
+            border-radius: 50%;
+        }
+
+        /* AI Content */
+        .ai-section {
+            background: linear-gradient(135deg, rgba(201, 166, 107, 0.05) 0%, transparent 100%);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .ai-item {
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .ai-item-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-item-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(201, 166, 107, 0.08) 0%, transparent 100%);
+            border-left: 2px solid var(--accent-gold);
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .highlight-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+
+        /* Alternatives Grid */
+        .alternatives-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .alternative-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .alternative-card:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .alternative-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .alternative-tagline {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Historical Source */
+        .source-tag {
+            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(124, 106, 156, 0.15);
+            color: var(--accent-violet);
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        @media (max-width: 1024px) {
+            .revenue-grid { grid-template-columns: repeat(2, 1fr); }
+            .alternatives-grid { grid-template-columns: repeat(2, 1fr); }
+            .roadmap-line { display: none; }
+            .roadmap-item { grid-template-columns: 1fr; gap: 1rem; }
+            .roadmap-node { order: -1; }
+            .roadmap-content.left, .roadmap-content.right { text-align: left; }
+            .roadmap-tags.left { justify-content: flex-start; }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 1.5rem; }
+            .revenue-grid { grid-template-columns: 1fr; }
+            .alternatives-grid { grid-template-columns: 1fr; }
+            .name-grid { grid-template-columns: 1fr; }
+            .ai-grid { grid-template-columns: 1fr; }
+            .nav-dots { display: none; }
+            .slide-number { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .fade-in { opacity: 1; transform: none; transition: none; }
+            .roadmap-content { opacity: 1; transform: none; transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    <div class="progress-bar" id="progress"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- SLIDE 1: Name Evaluation -->
+    <section class="slide" id="slide-0">
+        <div class="content-block">
+            <p class="phase-title fade-in">ANALYSE STRATEGIQUE</p>
+            <h2 class="font-display section-title fade-in stagger-1">Evaluation du nom "L'Anaconda"</h2>
+            <p class="paragraph fade-in stagger-2" style="max-width: 700px;">
+                Le nom actuel pose probleme. Trop explicite, trop cliche. Il attire le mauvais public et ne correspond pas a l'image sophistiquee visee.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <!-- Current Name Analysis -->
+                <div class="name-card current fade-in stagger-3">
+                    <div class="name-header">
+                        <div>
+                            <p class="name-label current">Nom actuel</p>
+                            <p class="name-title" style="color: var(--text-secondary); text-decoration: line-through;">L'Anaconda</p>
+                        </div>
+                    </div>
+                    
+                    <div class="name-grid">
+                        <div class="name-point">
+                            <svg class="point-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            <p class="point-text"><strong>Connotation sexuelle evidente</strong> — Le serpent renvoie immediatement au phallus. Zero subtilite.</p>
+                        </div>
+                        <div class="name-point">
+                            <svg class="point-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            <p class="point-text"><strong>Cliche de bar de strip-tease</strong> — Suggere un etablissement bas de gamme.</p>
+                        </div>
+                        <div class="name-point">
+                            <svg class="point-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            <p class="point-text"><strong>Attire le mauvais profil</strong> — Clients en quete rapide, pas amateurs d'experience.</p>
+                        </div>
+                        <div class="name-point">
+                            <svg class="point-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            <p class="point-text"><strong>Zero mystere</strong> — Tout est dit dans le nom. Pas d'envie d'en savoir plus.</p>
+                        </div>
+                    </div>
+
+                    <div class="score-bar">
+                        <div class="score-fill low" style="width: 25%;"></div>
+                    </div>
+                    <div class="score-label">
+                        <span>Score branding</span>
+                        <span style="color: var(--danger);">2.5 / 10</span>
+                    </div>
+                </div>
+
+                <!-- Your Proposal -->
+                <div class="name-card proposal fade-in stagger-4">
+                    <div class="name-header">
+                        <div>
+                            <p class="name-label owner">Votre proposition</p>
+                            <p class="name-title" style="color: var(--accent-gold);">Permissive Bar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="name-grid">
+                        <div class="name-point">
+                            <svg class="point-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12l2 2 4-4"/>
+                            </svg>
+                            <p class="point-text"><strong>Neologisme maitrise</strong> — Creez votre propre categorie. Unique sur le marche.</p>
+                        </div>
+                        <div class="name-point">
+                            <svg class="point-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12l2 2 4-4"/>
+                            </svg>
+                            <p class="point-text"><strong>Double sens elegant</strong> — "Permissif" suggere la liberte sans etre grossier.</p>
+                        </div>
+                        <div class="name-point">
+                            <svg class="point-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12l2 2 4-4"/>
+                            </svg>
+                            <p class="point-text"><strong>Filtrage naturel</strong> — Celui qui comprend est le bon profil.</p>
+                        </div>
+                        <div class="name-point">
+                            <svg class="point-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12l2 2 4-4"/>
+                            </svg>
+                            <p class="point-text"><strong>Utilisable en sous-titre</strong> — "Le Cercle — Permissive Bar"</p>
+                        </div>
+                    </div>
+
+                    <div class="score-bar">
+                        <div class="score-fill gold" style="width: 85%;"></div>
+                    </div>
+                    <div class="score-label">
+                        <span>Score branding</span>
+                        <span style="color: var(--accent-gold);">8.5 / 10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Proposals -->
+            <div class="fade-in stagger-5" style="margin-top: 2rem;">
+                <p class="time-label" style="font-size: 0.7rem; letter-spacing: 0.15em; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 1rem;">Autres pistes dans le meme esprit</p>
+                <div class="alternatives-grid">
+                    <div class="alternative-card">
+                        <p class="alternative-name">Le Cercle</p>
+                        <p class="alternative-tagline">Simple. Exclusif. Mystere. Fonctionne avec "Permissive Bar" en sous-titre.</p>
+                    </div>
+                    <div class="alternative-card">
+                        <p class="alternative-name">L'Antichambre</p>
+                        <p class="alternative-tagline">Suggestion d'un ailleurs. Espace de transition entre deux mondes.</p>
+                    </div>
+                    <div class="alternative-card">
+                        <p class="alternative-name">Le Privilege</p>
+                        <p class="alternative-tagline">Statut. Reconnaissance. Ce a quoi on a acces.</p>
+                    </div>
+                    <div class="alternative-card">
+                        <p class="alternative-name">Le Confidential</p>
+                        <p class="alternative-tagline">Anglais, compris internationalement. Discretion au premier plan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">01 / 06</span>
+    </section>
+
+    <!-- SLIDE 2: Revenue Streams -->
+    <section class="slide" id="slide-1">
+        <div class="content-block">
+            <p class="phase-title fade-in">DIVERSIFICATION</p>
+            <h2 class="font-display section-title fade-in stagger-1">Nouvelles sources de revenus</h2>
+            <p class="paragraph fade-in stagger-2" style="max-width: 700px;">
+                Le lieu physique est le coeur. Les actifs numeriques et l'experientiel generent des revenus complementaires et renforcent la fidelisation.
+            </p>
+
+            <div class="revenue-grid fade-in stagger-3">
+                <!-- OnlyFans -->
+                <div class="revenue-card">
+                    <svg class="revenue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M8 21h8"/>
+                        <path d="M12 17v4"/>
+                        <path d="M7 10h.01M12 10h.01M17 10h.01"/>
+                    </svg>
+                    <p class="revenue-title">Contenu OnlyFans</p>
+                    <p class="revenue-desc">
+                        Les filles creent du contenu exclusif. Le club prend une commission sur les abonnements. 
+                        Synergie : le client prolonge le fantasme chez lui. La relation continue entre les visites.
+                    </p>
+                </div>
+
+                <!-- AI Content -->
+                <div class="revenue-card">
+                    <svg class="revenue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+                        <path d="M16 14a4 4 0 0 1-8 0"/>
+                        <path d="M12 18v4"/>
+                        <path d="M8 22h8"/>
+                    </svg>
+                    <p class="revenue-title">Contenu IA generatif</p>
+                    <p class="revenue-desc">
+                        Avatars numeriques bases sur les filles du bar. Contenu sur mesure, 24/7, sans limite physique. 
+                        Le client commande son scenario personnalise. La fille touche des royalties sans etre presente.
+                    </p>
+                </div>
+
+                <!-- Premium Events -->
+                <div class="revenue-card">
+                    <svg class="revenue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <p class="revenue-title">Evenements experientiels</p>
+                    <p class="revenue-desc">
+                        Soirees a theme elaborees, inspirees de rituels historiques. 
+                        Tarification premium, capacite limitee, clientele selectionnee. L'experience devient un souvenir raconte.
+                    </p>
+                </div>
+            </div>
+
+            <div class="highlight-box fade-in stagger-4" style="margin-top: 2rem;">
+                <p class="highlight-text">
+                    <strong style="color: var(--text-primary);">Principe:</strong> 
+                    Le contenu numerique cree une relation continue avec le client entre ses visites. Il consomme l'experience meme quand il n'est pas la.
+                    C'est un vecteur de fidelisation et de dependance emotionnelle.
+                </p>
+            </div>
+        </div>
+        <span class="slide-number">02 / 06</span>
+    </section>
+
+    <!-- SLIDE 3: AI Detail -->
+    <section class="slide" id="slide-2">
+        <div class="content-block">
+            <p class="phase-title fade-in">CONTENU IA</p>
+            <h2 class="font-display section-title fade-in stagger-1">Exploitation de l'intelligence artificielle</h2>
+            <p class="paragraph fade-in stagger-2" style="max-width: 700px;">
+                L'IA permet de creer du contenu infini a partir de visages et corps agree par les filles. Chaque cliente peut etre clonee numeriquement 
+                et generer des revenus sans etre physiquement presente.
+            </p>
+
+            <div class="ai-section fade-in stagger-3">
+                <p class="time-label" style="margin-bottom: 0.5rem;">Modeles d'utilisation</p>
+                <div class="ai-grid">
+                    <div class="ai-item">
+                        <p class="ai-item-title">Avatars sur mesure</p>
+                        <p class="ai-item-desc">
+                            Le client cree son ideal : age, style, personnalite. L'IA genere des photos et videos correspondant exactement a ses preferences.
+                        </p>
+                    </div>
+                    <div class="ai-item">
+                        <p class="ai-item-title">Clones des filles reelles</p>
+                        <p class="ai-item-desc">
+                            Chaque fille autorise son clone numerique. Elle touche une royalty sur chaque contenu genere a son image. 
+                            Gagne de l'argent meme en conge.
+                        </p>
+                    </div>
+                    <div class="ai-item">
+                        <p class="ai-item-title">Scenarios interactifs</p>
+                        <p class="ai-item-desc">
+                            Chatbots avec photos generees en temps reel. Le client vit une experience personnalisee, avec reponses adaptees a ses messages.
+                        </p>
+                    </div>
+                    <div class="ai-item">
+                        <p class="ai-item-title">Contenu "souvenir"</p>
+                        <p class="ai-item-desc">
+                            Apres une soiree, le client recoit un lien prive vers du contenu personnalise base sur l'experience vecue. 
+                            Prolonge le fantasme, cree une dependance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fade-in stagger-4" style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem;">
+                    <p class="time-label" style="margin-bottom: 0.75rem;">Avantages</p>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">+ Production 24/7 sans fatigue</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">+ Contenu illimite a cout marginal zero</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">+ Possibilite de tester des niches</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">+ Protection des filles (pas d'exposition reelle)</p>
+                    </div>
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem;">
+                    <p class="time-label" style="margin-bottom: 0.75rem;">Considerations</p>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">- Accord ecrit obligatoire des modeles</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">- Transparence sur l'origine IA</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">- Qualite suffisante pour etre credible</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">- Juridique a verifier selon pays</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">03 / 06</span>
+    </section>
+
+    <!-- SLIDE 4: Historical Concepts -->
+    <section class="slide" id="slide-3">
+        <div class="content-block">
+            <p class="phase-title fade-in">CONCEPTS EVENEMENTIELS</p>
+            <h2 class="font-display section-title fade-in stagger-1">S'inspirer du vivier historique</h2>
+            <p class="paragraph fade-in stagger-2" style="max-width: 800px;">
+                L'histoire regorge de rituels ou le plaisir etait codifie, social, normalise. Ces precedents offrent un reservoir de concepts 
+                a adapter. Le but : transformer la transgression en experience collective maitrisee.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem;">
+                <!-- Example 1: Le Jeu des Rois -->
+                <div class="concept-card fade-in stagger-3">
+                    <div class="concept-header">
+                        <div>
+                            <p class="source-tag">France ancien regime</p>
+                            <p class="concept-title">Le Jeu des Rois</p>
+                        </div>
+                    </div>
+                    <p class="concept-desc">
+                        Repas elegant, convives en tenue de soiree. Sous la nappe, les filles prodiguent leurs soins. 
+                        Le defi : manger, converser, rire, sans rien laisser paraitre. Celui qui craque paie l'addition pour tous.
+                    </p>
+                    <div class="concept-rules">
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Note sur le sang-froid (1 a 10) par les autres convives</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Le perdant paie l'addition + pourboires</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Maximum 8 convives pour l'intimite</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example 2: Le Tribunal -->
+                <div class="concept-card fade-in stagger-3">
+                    <div class="concept-header">
+                        <div>
+                            <p class="source-tag">Rituel judiciaire libertin</p>
+                            <p class="concept-title">Le Tribunal</p>
+                        </div>
+                    </div>
+                    <p class="concept-desc">
+                        Chaque convive est "juge" pour un peche imaginaire. La fille est sa "peine". 
+                        Il doit recevoir son chatiment avec dignite pendant que les autres deliberent. La sentence est executee publiquement.
+                    </p>
+                    <div class="concept-rules">
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Le "coupable" doit garder son calme</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Les autres votent la severite</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Role-play juge/avocat/bourreau</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example 3: Le Bain Royal -->
+                <div class="concept-card fade-in stagger-4">
+                    <div class="concept-header">
+                        <div>
+                            <p class="source-tag">Rome antique / Turquie ottomane</p>
+                            <p class="concept-title">Le Bain Royal</p>
+                        </div>
+                    </div>
+                    <p class="concept-desc">
+                        L'experience du hammam reinterpetee. Eau chaude, vapeur, huiles. Les filles lavent et soignent. 
+                        L'etat de relaxation extreme rend le client plus vulnerable aux sensations.
+                    </p>
+                    <div class="concept-rules">
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Progression par etapes : vapeur, massage, services</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Ambiance thermale, pas erotique au depart</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Transition douce vers le permissif</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example 4: La Salle des Glaces -->
+                <div class="concept-card fade-in stagger-4">
+                    <div class="concept-header">
+                        <div>
+                            <p class="source-tag">Japon Edo / Salons europeens</p>
+                            <p class="concept-title">La Salle des Glaces</p>
+                        </div>
+                    </div>
+                    <p class="concept-desc">
+                        Les participants sont filmes en plan fixe. Ils doivent maintenir un visage impassible 
+                        pendant que l'imprevu se produit derriere eux. Defi de maitrise de soi en public.
+                    </p>
+                    <div class="concept-rules">
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Les visages sont projetes en direct</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>Le public vote le meilleur poker face</span>
+                        </div>
+                        <div class="concept-rule">
+                            <div class="rule-marker"></div>
+                            <span>La video peut etre achetee en souvenir</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box fade-in stagger-5" style="margin-top: 2rem;">
+                <p class="highlight-text">
+                    <strong style="color: var(--text-primary);">Valeur ajoutee:</strong> 
+                    Ces concepts transforment un acte sexuel en experience sociale partagee. Le client ne vient plus seulement pour le service, 
+                    mais pour l'experience collective. Il en parle a ses pairs. Le bouche-a-oreille se fait naturellement. 
+                    L'inspiration historique donne une legitimite : "ce n'est pas nouveau, c'est une tradition reinterpretee."
+                </p>
+            </div>
+        </div>
+        <span class="slide-number">04 / 06</span>
+    </section>
+
+    <!-- SLIDE 5: Roadmap -->
+    <section class="slide" id="slide-4">
+        <div class="content-block">
+            <p class="phase-title fade-in">IMPLEMENTATION</p>
+            <h2 class="font-display section-title fade-in stagger-1">Roadmap 2025-2026</h2>
+            <p class="paragraph fade-in stagger-2" style="max-width: 700px;">
+                Deploiement progressif sur 18 mois. Chaque phase construit sur la precedente.
+            </p>
+
+            <div class="roadmap-container fade-in stagger-3">
+                <div class="roadmap-line"></div>
+
+                <!-- Phase 1 -->
+                <div class="roadmap-item">
+                    <div class="roadmap-content left">
+                        <p class="roadmap-title">Phase 1 — Fondations</p>
+                        <p class="roadmap-desc">
+                            Renommer l'etablissement. Former le staff au nouveau positionnement. 
+                            Etablir les protocoles d'accueil VIP. Premier evenement avec invitation controlee.
+                        </p>
+                        <div class="roadmap-tags left">
+                            <span class="roadmap-tag">Branding</span>
+                            <span class="roadmap-tag">Formation</span>
+                            <span class="roadmap-tag">Protocoles</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-node">
+                        <div class="node-circle">P1</div>
+                        <p class="node-label">Mois 1-3</p>
+                    </div>
+                    <div></div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="roadmap-item">
+                    <div></div>
+                    <div class="roadmap-node">
+                        <div class="node-circle">P2</div>
+                        <p class="node-label">Mois 4-6</p>
+                    </div>
+                    <div class="roadmap-content right">
+                        <p class="roadmap-title">Phase 2 — Contenu numerique</p>
+                        <p class="roadmap-desc">
+                            Lancement des comptes OnlyFans des filles volontaires. 
+                            Mise en place du systeme de commissions. Premier tests de contenus IA.
+                        </p>
+                        <div class="roadmap-tags">
+                            <span class="roadmap-tag">OnlyFans</span>
+                            <span class="roadmap-tag">IA Test</span>
+                            <span class="roadmap-tag">Process</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="roadmap-item">
+                    <div class="roadmap-content left">
+                        <p class="roadmap-title">Phase 3 — Evenements signature</p>
+                        <p class="roadmap-desc">
+                            Premier evenement inspire du vivier historique. Invitations privees a VIP. 
+                            Documenter l'experience (photos stylees). Creer l'exclusivite.
+                        </p>
+                        <div class="roadmap-tags left">
+                            <span class="roadmap-tag">Concept</span>
+                            <span class="roadmap-tag">VIP</span>
+                            <span class="roadmap-tag">Marketing</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-node">
+                        <div class="node-circle">P3</div>
+                        <p class="node-label">Mois 7-9</p>
+                    </div>
+                    <div></div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="roadmap-item">
+                    <div></div>
+                    <div class="roadmap-node">
+                        <div class="node-circle">P4</div>
+                        <p class="node-label">Mois 10-12</p>
+                    </div>
+                    <div class="roadmap-content right">
+                        <p class="roadmap-title">Phase 4 — Expansion IA</p>
+                        <p class="roadmap-desc">
+                            Deploiement complet des avatars IA. Lancement des abonnements personnalises. 
+                            Systeme de "souvenirs" pour clients reguliers. Integration avec le parcours physique.
+                        </p>
+                        <div class="roadmap-tags">
+                            <span class="roadmap-tag">Scale IA</span>
+                            <span class="roadmap-tag">Fidelisation</span>
+                            <span class="roadmap-tag">Automatisation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 5 -->
+                <div class="roadmap-item">
+                    <div class="roadmap-content left">
+                        <p class="roadmap-title">Phase 5 — Ambassadeurs</p>
+                        <p class="roadmap-desc">
+                            Identification des 20-40 prescripteurs. Programme de parrainage structure. 
+                            Cercle prive formel avec evenements trimestriels exclusifs.
+                        </p>
+                        <div class="roadmap-tags left">
+                            <span class="roadmap-tag">Influence</span>
+                            <span class="roadmap-tag">Croissance</span>
+                            <span class="roadmap-tag">Reseau</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-node">
+                        <div class="node-circle">P5</div>
+                        <p class="node-label">Mois 13-18</p>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">05 / 06</span>
+    </section>
+
+    <!-- SLIDE 6: Summary -->
+    <section class="slide" id="slide-5">
+        <div class="content-block">
+            <p class="phase-title fade-in">SYNTHESE</p>
+            <h2 class="font-display section-title fade-in stagger-1">Points cles</h2>
+
+            <div class="fade-in stagger-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 2rem;">
+                    <p class="time-label" style="margin-bottom: 1rem;">Identite</p>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--danger); font-size: 1.25rem;">1</span>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Abandonner "L'Anaconda"</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Trop cliche, attire le mauvais profil.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent-gold); font-size: 1.25rem;">2</span>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Adopter "Permissive Bar"</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Votre neologisme. Unique sur le marche. Peut etre combine avec un autre nom.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--success); font-size: 1.25rem;">3</span>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Miser sur le mystere</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Qui comprend est le bon client.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 2rem;">
+                    <p class="time-label" style="margin-bottom: 1rem;">Diversification</p>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent-gold); font-size: 1.25rem;">1</span>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">OnlyFans structure</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Commission club + royalties filles.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent-gold); font-size: 1.25rem;">2</span>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Contenu IA</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Scalable, 24/7, passif.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent-gold); font-size: 1.25rem;">3</span>
+                            <div>
+                                <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.25rem;">Concepts historiques</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Vivier d'inspiration inepuisable.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Message -->
+            <div class="highlight-box fade-in stagger-3" style="margin-top: 2.5rem; border-left-color: var(--success); background: linear-gradient(135deg, rgba(74, 156, 106, 0.08) 0%, transparent 100%);">
+                <p class="highlight-text" style="font-size: 1rem;">
+                    <strong style="color: var(--text-primary);">Positionnement final:</strong> 
+                    Un lieu ou les messieurs qui ont reussi peuvent exercer leurs fantasmes sans jugement. 
+                    Le cadre est securise, respectueux, et le service est invisible. Le client se sent VIP, pas client. 
+                    Il revient, il recommande, il devient ambassadeur.
+                </p>
+            </div>
+
+            <!-- Key principles -->
+            <div class="fade-in stagger-4" style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <p class="time-label" style="margin-bottom: 1rem;">Principes directeurs</p>
+                <div style="display: flex; gap: 3rem; flex-wrap: wrap;">
+                    <div>
+                        <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.25rem;">Normaliser le fantasme</p>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Ce qui est transgressif ailleurs est normal ici.</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.25rem;">Cadre securise</p>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Discretion totale, protection absolue.</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.25rem;">Experience collective</p>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Le client partage, pas seulement consomme.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">06 / 06</span>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation dots
+            const slides = document.querySelectorAll('.slide');
+            const navDotsContainer = document.getElementById('navDots');
+            
+            slides.forEach(function(slide, index) {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                dot.setAttribute('data-index', index);
+                dot.setAttribute('aria-label', 'Aller a la section ' + (index + 1));
+                dot.setAttribute('role', 'button');
+                dot.setAttribute('tabindex', '0');
+                navDotsContainer.appendChild(dot);
+            });
+
+            const navDots = document.querySelectorAll('.nav-dot');
+
+            // Progress bar and active dot update
+            function updateProgress() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = Math.min((scrollTop / docHeight) * 100, 100);
+                document.getElementById('progress').style.width = progress + '%';
+
+                slides.forEach(function(slide, index) {
+                    const rect = slide.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                        navDots.forEach(function(d) { d.classList.remove('active'); });
+                        if (navDots[index]) {
+                            navDots[index].classList.add('active');
+                        }
+                    }
+                });
+            }
+
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(function(el) {
+                observer.observe(el);
+            });
+
+            // Roadmap content animation
+            const roadmapContents = document.querySelectorAll('.roadmap-content');
+            const roadmapObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        setTimeout(function() {
+                            entry.target.classList.add('visible');
+                        }, 150);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            roadmapContents.forEach(function(content) {
+                roadmapObserver.observe(content);
+            });
+
+            // Click handlers for nav dots
+            navDots.forEach(function(dot) {
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    slides[index].scrollIntoView({ behavior: 'smooth' });
+                });
+                dot.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        slides[index].scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Scroll listener with throttle
+            let ticking = false;
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        updateProgress();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Alternative cards interaction
+            const alternativeCards = document.querySelectorAll('.alternative-card');
+            alternativeCards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    alternativeCards.forEach(function(c) { c.style.borderColor = 'var(--border)'; });
+                    this.style.borderColor = 'var(--accent-gold)';
+                });
+            });
+
+            // Initial call
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
